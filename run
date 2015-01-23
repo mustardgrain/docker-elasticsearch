@@ -1,0 +1,14 @@
+#!/bin/bash -e
+
+if [ "$UNICAST_HOST" != "" ] ; then
+    if [ ! -f $ELASTICSEARCH_HOME/.esconfig ]; then
+        CONF_FILE=$CASSANDRA_HOME/confif/elasticsearch.yml
+
+        echo "discovery.zen.ping.multicast.enabled: false" >> $CONF_FILE
+        echo "discovery.zen.ping.unicast.hosts: [\"$UNICAST_HOST\"]" >> $CONF_FILE
+
+        touch $ELASTICSEARCH_HOME/.esconfig
+    fi
+fi
+
+$ELASTICSEARCH_HOME/bin/elasticsearch
