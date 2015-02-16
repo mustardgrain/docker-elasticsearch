@@ -1,26 +1,23 @@
 #!/bin/bash -e
 
-if [ "$USE_UNICAST" != "" ] ; then
-    if [ ! -f $ELASTICSEARCH_HOME/.esconfig ]; then
-        if [ "$UNICAST_HOST" = "" ] ; then
-            UNICAST_HOST=$(/sbin/ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')
-        fi
-
-        CONF_FILE=$ELASTICSEARCH_HOME/config/elasticsearch.yml
-
-        if [ "$MASTER" = "" ] ; then
-            MASTER=false
-        fi
-
-        echo "node.master: $MASTER" >> $CONF_FILE
-        echo "discovery.zen.minimum_master_nodes: $NUM_MASTERS" >> $CONF_FILE
-        echo "discovery.zen.ping.multicast.enabled: false" >> $CONF_FILE
-        echo "discovery.zen.ping.unicast.hosts: [\"$UNICAST_HOST\"]" >> $CONF_FILE
-
-        $ELASTICSEARCH_HOME/bin/plugin -install mobz/elasticsearch-head
-
-        touch $ELASTICSEARCH_HOME/.esconfig
+if [ ! -f $ELASTICSEARCH_HOME/.esconfig ]; then
+    if [ "$MASTER_IP" = "" ] ; then
+        MASTER_IP=$(/sbin/ifconfig eth0 | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')
+        IS_MASTER=true
+    else
+        IS_MASTER=false
     fi
+
+    CONF_FILE=$ELASTICSEARCH_HOME/config/elasticsearch.yml
+    echo "node.master: $IS_MASTER" >> $CONF_FILE
+    echo "discovery.zen.ping.multicast.enabled: false" >> $CONF_FILE
+    echo "discovery.zen.ping.unicast.hosts: [\"$MASTER_IP\"]" >> $CONF_FILE
+
+    if [ "$IS_MASTER" = "true" ] ; then
+        $ELASTICSEARCH_HOME/bin/plugin -install mobz/elasticsearch-head
+    fi
+
+    touch $ELASTICSEARCH_HOME/.esconfig
 fi
 
 $ELASTICSEARCH_HOME/bin/elasticsearch
