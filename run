@@ -20,11 +20,7 @@ if [ ! -f $ELASTICSEARCH_HOME/.esconfig ]; then
     touch $ELASTICSEARCH_HOME/.esconfig
 fi
 
-if [ "$ES_HEAP_SIZE" = "" ] ; then
-  # Elasticsearch default
-  ES_HEAP_SIZE="1g"
-fi
-
-export ES_HEAP_SIZE=$ES_HEAP_SIZE
+# Check if overrides were provided
+export ES_HEAP_SIZE=${ES_HEAP_SIZE:="1g"}
 
 $ELASTICSEARCH_HOME/bin/elasticsearch
