@@ -13,9 +13,7 @@ if [ ! -f $ELASTICSEARCH_HOME/.esconfig ]; then
     echo "discovery.zen.ping.multicast.enabled: false" >> $CONF_FILE
     echo "discovery.zen.ping.unicast.hosts: [\"$MASTER_IP\"]" >> $CONF_FILE
 
-    if [ "$IS_MASTER" = "true" ] ; then
-        $ELASTICSEARCH_HOME/bin/plugin -install mobz/elasticsearch-head
-    fi
+    $ELASTICSEARCH_HOME/bin/plugin -install elasticsearch/marvel/latest
 
     touch $ELASTICSEARCH_HOME/.esconfig
 fi
