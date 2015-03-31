@@ -4,7 +4,7 @@ MAINTAINER Kirk True <kirk@mustardgrain.com>
 
 CMD ["/sbin/my_init"]
 
-ENV ELASTICSEARCH_VERSION 1.4.4
+ENV ELASTICSEARCH_VERSION 1.5.0
 ENV ELASTICSEARCH_URL https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-$ELASTICSEARCH_VERSION.tar.gz
 ENV ELASTICSEARCH_HOME /opt/elasticsearch-$ELASTICSEARCH_VERSION
 
