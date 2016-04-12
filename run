@@ -12,13 +12,11 @@ if [ ! -f $ELASTICSEARCH_HOME/.esconfig ]; then
     echo "node.master: $IS_MASTER" >> $CONF_FILE
     echo "discovery.zen.ping.multicast.enabled: false" >> $CONF_FILE
     echo "discovery.zen.ping.unicast.hosts: [\"$MASTER_IP\"]" >> $CONF_FILE
-
-    $ELASTICSEARCH_HOME/bin/plugin -install elasticsearch/marvel/latest
-
+    echo "network.host: 0.0.0.0" >> $CONF_FILE
     touch $ELASTICSEARCH_HOME/.esconfig
 fi
 
 # Check if overrides were provided
 export ES_HEAP_SIZE=${ES_HEAP_SIZE:="1g"}
 
-$ELASTICSEARCH_HOME/bin/elasticsearch
+$ELASTICSEARCH_HOME/bin/elasticsearch -Des.insecure.allow.root=true
